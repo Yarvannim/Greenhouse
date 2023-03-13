@@ -2,7 +2,10 @@ from flask import Flask, render_template
 from fhict_cb_01.CustomPymata4 import CustomPymata4
 from random import randint
 from datetime import datetime
+from database import db
 import json
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 #region global variables
 app = Flask(__name__)
@@ -12,6 +15,7 @@ humidity = 0
 temperature = 0
 LDRPIN = 2
 DHTPIN  = 12
+greenhouses = [1,2,3,4,5]
 #endregion
 
 
@@ -41,6 +45,15 @@ def ldr():
 ldr()
 air()
 LatestReadings = []
+
+def scheduledDataEntry():
+    for greenhouse in greenhouses:
+        db.insertScheduledData(greenhouse,ldrvalue,humidity,temperature)
+
+sched = BackgroundScheduler()
+sched.add_job(scheduledDataEntry, 'interval', seconds =30) #will do the scheduledDataEntry work for every 30 seconds
+
+sched.start()
 
 def get_data():
     date = datetime.now()
