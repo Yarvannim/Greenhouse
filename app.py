@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from fhict_cb_01.CustomPymata4 import CustomPymata4
 from random import randint
 from datetime import datetime
@@ -49,12 +49,9 @@ def scheduledDataEntry():
     db.insertScheduledData(1,ldrvalue,humidity,temperature)
 
 sched = BackgroundScheduler()
-sched.add_job(scheduledDataEntry, 'interval', seconds =10) #will do the scheduledDataEntry work for every 30 seconds
+sched.add_job(scheduledDataEntry, 'interval', seconds =30) #will do the scheduledDataEntry work for every 30 seconds
 
 sched.start()
-
-LatestReadings = db.getLatestData(1, 15)
-print(LatestReadings)
 
 def get_data():
     date = datetime.now()
@@ -68,11 +65,7 @@ def get_data():
 
 @app.route("/data")
 def indexpage():
-    ldrlevel = ldrvalue
-    # Readings = get_data()
-    # date = datetime.now()
-    # now = date.strftime("%d/%m/%Y, %H:%M:%S")
-    # DictData = [{'Time': now, 'LDR': ldrlevel, 'humidity': humidity, 'temperature': temperature}]
-    # JsonData = json.dumps(DictData)
-    # return JsonData
+    amount = request.args.get('amount', default=10, type=int)
+    greenhouse = request.args.get('greenhouse', default=1, type=int)
+    return db.getLatestData(greenhouse, amount)
     # return render_template('index.html', lightlevelandtime=Readings, ldr=ldrlevel, humidity=humidity, temperature=temperature )
