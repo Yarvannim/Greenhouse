@@ -1,7 +1,10 @@
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, select,insert,ForeignKey, func, DateTime
+from sqlalchemy_utils import database_exists, create_database
 
 # create engine to connect to db
 _engine = create_engine("mariadb+mariadbconnector://root@127.0.0.1:3306/greenhouse")
+if not database_exists(_engine.url):
+    create_database(_engine.url)
 _meta = MetaData()
 
 users = Table(
@@ -36,3 +39,9 @@ def insertScheduledData(_greenhouse, _lightlevel, _humidity, _temperature):
     except:
         print('Something went wrong with inserting the scheduled data')
 
+def getLatestData(_id, _amount):
+    _stmt = select(greenhouseData).where(greenhouseData.c.greenhouse_ID == _id).order_by(greenhouseData.c.create_time.desc()).limit(_amount)
+    _conn = _engine.connect()
+    _result = _conn.execute(_stmt)
+    _conn.close()
+    return _result
