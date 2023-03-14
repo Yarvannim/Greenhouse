@@ -4,11 +4,13 @@ from random import randint
 from datetime import datetime
 from database import db
 import json
+import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
 #region global variables
 app = Flask(__name__)
+app.debug = True
 board = CustomPymata4(com_port = "COM3")
 ldrvalue = 0
 humidity = 0
@@ -64,8 +66,14 @@ def get_data():
     return LatestReadings#, now
 
 @app.route("/data")
-def indexpage():
+def datapage():
     amount = request.args.get('amount', default=10, type=int)
     greenhouse = request.args.get('greenhouse', default=1, type=int)
     return db.getLatestData(greenhouse, amount)
     # return render_template('index.html', lightlevelandtime=Readings, ldr=ldrlevel, humidity=humidity, temperature=temperature )
+
+@app.route("/")
+def page():
+    response = requests.get("http://127.0.0.1:5000/data?greenhouse=1&amount=10")
+    data = json.loads(response.text)
+    return render_template('data.html', readingsfromdatabase=data)

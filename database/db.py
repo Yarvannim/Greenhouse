@@ -50,7 +50,7 @@ def getLatestData(_id, _amount):
     results = []   
     for record in queryData:
         results.append({
-            'Greenhouse number:': record.greenhouse_id,
+            'Greenhouse_number': record.greenhouse_id,
             'time': record.create_time.strftime('%d-%m-%y %H:%M:%S'),
             'light_level': record.light_level,
             'humidity': record.humidity,

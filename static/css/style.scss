@@ -1,0 +1,27 @@
+body{
+    font-family: 'Maven Pro', sans-serif;
+}
+.dataTable{
+    overflow: hidden;
+    border-radius: 10px;
+    border-spacing: 0;
+    thead{
+        tr{
+            background: #36304a;
+            th{
+                padding: 20px;
+                font-size: 18px;
+                color: #ffffff;
+            }
+        }
+    }
+    tbody{
+        tr:nth-child(even){
+            background-color: #f5f5f5
+        }
+        td{
+            padding: 10px 20px;
+        }
+
+    }
+}

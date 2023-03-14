@@ -1,1 +1,23 @@
-/*# sourceMappingURL=style.css.map */
+body {
+  font-family: "Maven Pro", sans-serif;
+}
+
+.dataTable {
+  overflow: hidden;
+  border-radius: 10px;
+  border-spacing: 0;
+}
+.dataTable thead tr {
+  background: #36304a;
+}
+.dataTable thead tr th {
+  padding: 20px;
+  font-size: 18px;
+  color: #ffffff;
+}
+.dataTable tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+.dataTable tbody td {
+  padding: 10px 20px;
+}/*# sourceMappingURL=style.css.map */
