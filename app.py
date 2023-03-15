@@ -10,7 +10,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 #region global variables
 app = Flask(__name__)
-app.debug = True
 board = CustomPymata4(com_port = "COM3")
 ldrvalue = 0
 humidity = 0
