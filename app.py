@@ -1,8 +1,12 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from fhict_cb_01.CustomPymata4 import CustomPymata4
 from random import randint
 from datetime import datetime
+from database import db
 import json
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 #region global variables
 app = Flask(__name__)
@@ -42,6 +46,14 @@ ldr()
 air()
 LatestReadings = []
 
+def scheduledDataEntry():
+    db.insertScheduledData(1,ldrvalue,humidity,temperature)
+
+sched = BackgroundScheduler()
+sched.add_job(scheduledDataEntry, 'interval', seconds =30) #will do the scheduledDataEntry work for every 30 seconds
+
+sched.start()
+
 def get_data():
     date = datetime.now()
     now = date.strftime("%d/%m/%Y, %H:%M:%S")
@@ -53,12 +65,14 @@ def get_data():
     return LatestReadings#, now
 
 @app.route("/data")
-def indexpage():
-    ldrlevel = ldrvalue
-    Readings = get_data()
-    # date = datetime.now()
-    # now = date.strftime("%d/%m/%Y, %H:%M:%S")
-    # DictData = [{'Time': now, 'LDR': ldrlevel, 'humidity': humidity, 'temperature': temperature}]
-    # JsonData = json.dumps(DictData)
-    # return JsonData
-    return render_template('index.html', lightlevelandtime=Readings, ldr=ldrlevel, humidity=humidity, temperature=temperature )
+def datapage():
+    amount = request.args.get('amount', default=10, type=int)
+    greenhouse = request.args.get('greenhouse', default=1, type=int)
+    return db.getLatestData(greenhouse, amount)
+    # return render_template('index.html', lightlevelandtime=Readings, ldr=ldrlevel, humidity=humidity, temperature=temperature )
+
+@app.route("/")
+def page():
+    response = requests.get("http://127.0.0.1:5000/data?greenhouse=1&amount=10")
+    data = json.loads(response.text)
+    return render_template('data.html', readingsfromdatabase=data)
