@@ -23,8 +23,8 @@
 // }
 // }
 $(document).ready(function(){
-    getData()
-    setInterval(function(){getData()}, 30000);
+  getAllData()
+  setInterval(function(){getData()}, 30000);
 });
 
 function getData(){
@@ -32,8 +32,45 @@ function getData(){
   let amount = $("#input_amount").val()
   $.getJSON(`http://127.0.0.1:5000/data?greenhouse=${greenhouse}&amount=${amount}`, function(data){
     const results = data.results
-    let newresults = results.map(result => `<tr><td>${result.Greenhouse_number}</td><td>${result.time}</td><td>${result.light_level}</td><td>${result.humidity}</td><td>${result.temperature}</td></tr>`)
+    let newresults = results.map(result => `<tr><td>${result.Greenhouse_number}</td><td>${result.Sensor_ID}</td><td>${result.time}</td><td>${result.light_level}</td><td>${result.humidity}</td><td>${result.temperature}</td></tr>`)
     $(".dataDisplay").empty()
     $(".dataDisplay").append(newresults)
   });
+}
+
+function getAverages(){
+  let greenhouse = $("#input_greenhouse").val()
+  $.getJSON(`http://127.0.0.1:5000/data/averages?greenhouse=${greenhouse}`, function(data){
+    const results = data.results
+    let newresults = results.map(result => `<td>${result.average_light_Level}</td><td>${result.average_humidity}</td><td>${result.average_humidity}</td>`)
+    $(".Display.Average td:nth-child(2) , .Display.Average td:nth-child(3), .Display.Average td:nth-child(4)").remove()
+    $(".Display.Average td:nth-child(1)").after(newresults)
+  });
+}
+
+function getLowest(){
+  let greenhouse = $("#input_greenhouse").val()
+  $.getJSON(`http://127.0.0.1:5000/data/minimum?greenhouse=${greenhouse}`, function(data){
+    const results = data.results
+    let newresults = results.map(result => `<td>${result.lowest_light_Level}</td><td>${result.lowest_humidity}</td><td>${result.lowest_humidity}</td>`)
+    $(".Display.Lowest td:nth-child(2) , .Display.Lowest td:nth-child(3), .Display.Lowest td:nth-child(4)").remove()
+    $(".Display.Lowest td:nth-child(1)").after(newresults)
+  });
+}
+
+function getHighest(){
+  let greenhouse = $("#input_greenhouse").val()
+  $.getJSON(`http://127.0.0.1:5000/data/highest?greenhouse=${greenhouse}`, function(data){
+    const results = data.results
+    let newresults = results.map(result => `<td>${result.highest_light_Level}</td><td>${result.highest_humidity}</td><td>${result.highest_humidity}</td>`)
+    $(".Display.Highest td:nth-child(2) , .Display.Highest td:nth-child(3), .Display.Highest td:nth-child(4)").remove()
+    $(".Display.Highest td:nth-child(1)").after(newresults)
+  });
+}
+
+function getAllData(){
+  getData()
+  getAverages()
+  getLowest()
+  getHighest()
 }

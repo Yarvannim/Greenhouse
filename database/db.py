@@ -30,7 +30,7 @@ class GreenhouseData(Base):
     entry_id = Column(Integer, primary_key=True, autoincrement=True)
     greenhouse_id = Column(Integer, ForeignKey('greenhouses.id'), nullable=False)
     create_time = Column(DateTime, server_default=func.now(), nullable=False)
-    light_level = Column(String(10), nullable=False)
+    light_level = Column(Integer, nullable=False)
     humidity = Column(Integer, nullable=False)
     temperature = Column(Integer, nullable=False)
     
@@ -51,6 +51,7 @@ def getLatestData(_id, _amount):
     for record in queryData:
         results.append({
             'Greenhouse_number': record.greenhouse_id,
+            'Sensor_ID': 487498,
             'time': record.create_time.strftime('%d-%m-%y %H:%M:%S'),
             'light_level': record.light_level,
             'humidity': record.humidity,
@@ -58,4 +59,61 @@ def getLatestData(_id, _amount):
         })
     jsonified_results = json.dumps({'results': results})
     session.close()
+    return jsonified_results
+
+def getAverageData(_id):
+    session = Session()
+    queryData = session.query(
+        func.avg(GreenhouseData.light_level),
+        func.avg(GreenhouseData.humidity),
+        func.avg(GreenhouseData.temperature)
+        ).filter(
+            GreenhouseData.greenhouse_id == _id
+        ).one()
+    session.close()  
+    results = []
+    results.append({
+        'average_light_Level': str(queryData[0]),
+        'average_humidity': str(queryData[1]),
+        'average_temperature': str(queryData[2]),
+    })
+    jsonified_results = json.dumps({'results': results})
+    return jsonified_results
+
+def getLowestData(_id):
+    session = Session()
+    queryData = session.query(
+        func.min(GreenhouseData.light_level),
+        func.min(GreenhouseData.humidity),
+        func.min(GreenhouseData.temperature)
+        ).filter(
+            GreenhouseData.greenhouse_id == _id
+        ).one()
+    session.close()  
+    results = []
+    results.append({
+        'lowest_light_Level': str(queryData[0]),
+        'lowest_humidity': str(queryData[1]),
+        'lowest_temperature': str(queryData[2]),
+    })
+    jsonified_results = json.dumps({'results': results})
+    return jsonified_results
+
+def getHighestData(_id):
+    session = Session()
+    queryData = session.query(
+        func.max(GreenhouseData.light_level),
+        func.max(GreenhouseData.humidity),
+        func.max(GreenhouseData.temperature)
+        ).filter(
+            GreenhouseData.greenhouse_id == _id
+        ).one()
+    session.close()  
+    results = []
+    results.append({
+        'highest_light_Level': str(queryData[0]),
+        'highest_humidity': str(queryData[1]),
+        'highest_temperature': str(queryData[2]),
+    })
+    jsonified_results = json.dumps({'results': results})
     return jsonified_results

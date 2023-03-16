@@ -44,7 +44,6 @@ def ldr():
 
 ldr()
 air()
-LatestReadings = []
 
 def scheduledDataEntry():
     db.insertScheduledData(1,ldrvalue,humidity,temperature)
@@ -54,25 +53,32 @@ sched.add_job(scheduledDataEntry, 'interval', seconds =30) #will do the schedule
 
 sched.start()
 
-def get_data():
-    date = datetime.now()
-    now = date.strftime("%d/%m/%Y, %H:%M:%S")
-    ldrlevel = ldrvalue
-    lightandtime = str(ldrlevel) + ' W/M2 ' + now
-    LatestReadings.append(lightandtime)
-    if len(LatestReadings) > 25:
-        LatestReadings.pop(0)
-    return LatestReadings#, now
-
 @app.route("/data")
 def datapage():
     amount = request.args.get('amount', default=10, type=int)
     greenhouse = request.args.get('greenhouse', default=1, type=int)
     return db.getLatestData(greenhouse, amount)
-    # return render_template('index.html', lightlevelandtime=Readings, ldr=ldrlevel, humidity=humidity, temperature=temperature )
+@app.route("/data/averages")
+def dataAveragespage():
+    greenhouse = request.args.get('greenhouse', default=1, type=int)
+    return db.getAverageData(greenhouse)
+@app.route("/data/minimum")
+def dataLowestpage():
+    greenhouse = request.args.get('greenhouse', default=1, type=int)
+    return db.getLowestData(greenhouse)
+@app.route("/data/highest")
+def dataHighestpage():
+    greenhouse = request.args.get('greenhouse', default=1, type=int)
+    return db.getHighestData(greenhouse)
 
 @app.route("/")
 def page():
-    response = requests.get("http://127.0.0.1:5000/data?greenhouse=1&amount=10")
-    data = json.loads(response.text)
-    return render_template('data.html', readingsfromdatabase=data)
+    responseData = requests.get("http://127.0.0.1:5000/data?greenhouse=1&amount=10")
+    data = json.loads(responseData.text)
+    responseAverages = requests.get("http://127.0.0.1:5000/data/averages?greenhouse=1")
+    dataAverage = json.loads(responseAverages.text)
+    responseLowest = requests.get("http://127.0.0.1:5000/data/minimum?greenhouse=1")
+    dataLowest = json.loads(responseLowest.text)
+    responseHighest = requests.get("http://127.0.0.1:5000/data/highest?greenhouse=1")
+    dataHighest = json.loads(responseHighest.text)
+    return render_template('data.html', readingsfromdatabase=data, AverageData=dataAverage, LowestData=dataLowest, HighestData=dataHighest)

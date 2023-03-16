@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>Greenhouse</th>
+                <th>Sensor ID</th>
                 <th>Date and time</th>
                 <th>Light level</th>
                 <th>Humidity</th>
@@ -14,9 +15,34 @@
             </tr>
         </thead>
         <tbody>
+            <tr class="AverageDispla">
+                <td colspan="3">The averages:</td>
+                {% for json in AverageData.results %}
+                    <td>{{json.average_light_Level}}</td>
+                    <td>{{json.average_humidity}}</td>
+                    <td>{{json.average_temperature}}</td>
+                {% endfor %}
+            </tr>
+            <tr class="LowestDispla">
+                <td colspan="3">The lowest:</td>
+                {% for json in LowestData.results %}
+                    <td>{{json.lowest_light_Level}}</td>
+                    <td>{{json.lowest_humidity}}</td>
+                    <td>{{json.lowest_temperature}}</td>
+                {% endfor %}
+            </tr>
+            <tr class="HighestDispla">
+                <td colspan="3">The highest:</td>
+                {% for json in HighestData.results %}
+                    <td>{{json.highest_light_Level}}</td>
+                    <td>{{json.highest_humidity}}</td>
+                    <td>{{json.highest_temperature}}</td>
+                {% endfor %}
+            </tr>
             {% for json in readingsfromdatabase.results %}
                 <tr>
                     <td>{{json.Greenhouse_number}}</td>
+                    <td>{{json.Sensor_ID}}</td>
                     <td>{{json.time}}</td>
                     <td>{{json.light_level}}</td>
                     <td>{{json.humidity}}</td>
@@ -26,19 +52,31 @@
         </tbody>
     </table>
     <label for="greenhouse">Greenhouse</label>
-    <input type="number" name="greenhouse" id="input_greenhouse" value="1" onchange="getData()">
+    <input type="number" name="greenhouse" id="input_greenhouse" value="1" onchange="getAllData()">
     <label for="amount">Amount of records</label>
     <input type="number" name="amount" id="input_amount" value="15" onchange="getData()">
     <table class="dataTable">
         <thead>
             <tr>
                 <th>Greenhouse</th>
+                <th>Sensor ID</th>
                 <th>Date and time</th>
                 <th>Light level</th>
                 <th>Humidity</th>
                 <th>Temperature</th>
             </tr>
         </thead>
+        <tbody>
+            <tr class="Display Average">
+                <td colspan="3" class="averages">The average</td>
+            </tr>
+            <tr class="Display Highest">
+                <td colspan="3" class="highest">The highest</td>
+            </tr>
+            <tr class="Display Lowest">
+                <td colspan="3" class="lowest">The lowest</td>
+            </tr>
+        </tbody>
         <tbody class="dataDisplay">
 
         </tbody>
