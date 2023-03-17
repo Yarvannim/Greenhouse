@@ -29,6 +29,7 @@ class GreenhouseData(Base):
     
     entry_id = Column(Integer, primary_key=True, autoincrement=True)
     greenhouse_id = Column(Integer, ForeignKey('greenhouses.id'), nullable=False)
+    sensor_id = Column(Integer, nullable=False)
     create_time = Column(DateTime, server_default=func.now(), nullable=False)
     light_level = Column(Integer, nullable=False)
     humidity = Column(Integer, nullable=False)
@@ -37,9 +38,9 @@ class GreenhouseData(Base):
     greenhouse = relationship("Greenhouse", backref="data")
 Base.metadata.create_all(_engine)
 
-def insertScheduledData(_greenhouse, _lightlevel, _humidity, _temperature):
+def insertScheduledData(_greenhouse, _sensor_id, _lightlevel, _humidity, _temperature):
     session = Session()
-    Sensor_data = GreenhouseData(greenhouse_id = _greenhouse, light_level=_lightlevel, humidity=_humidity, temperature=_temperature)
+    Sensor_data = GreenhouseData(greenhouse_id = _greenhouse, sensor_id= _sensor_id ,light_level=_lightlevel, humidity=_humidity, temperature=_temperature)
     session.add(Sensor_data)
     session.commit()
     session.close()
@@ -51,7 +52,7 @@ def getLatestData(_id, _amount):
     for record in queryData:
         results.append({
             'Greenhouse_number': record.greenhouse_id,
-            'Sensor_ID': 487498,
+            'Sensor_ID': record.sensor_id,
             'time': record.create_time.strftime('%d-%m-%y %H:%M:%S'),
             'light_level': record.light_level,
             'humidity': record.humidity,
