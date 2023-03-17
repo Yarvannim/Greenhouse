@@ -36,7 +36,11 @@ def receive_data():
     humidity = data['humidity']
     temperature = data['temperature']
 
-    db.insertScheduledData(Greenhouse_number, Sensor_ID,light_level,humidity,temperature)
+    try:
+        db.insertScheduledData(Greenhouse_number, Sensor_ID,light_level,humidity,temperature)
+        return "Data has been entered"
+    except:
+        print('something went wrong with inserting the data')
 
 
 @app.route("/")
