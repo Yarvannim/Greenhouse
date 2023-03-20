@@ -1,5 +1,59 @@
 body {
   font-family: "Maven Pro", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100%;
+  font-size: 20px;
+}
+
+p {
+  margin: 0;
+}
+
+section {
+  margin-left: 12%;
+  padding: 25px;
+}
+
+.sidebar {
+  width: 12%;
+  height: 100vh;
+  background-color: #80c761;
+  position: fixed;
+  float: left;
+}
+.sidebar .logo {
+  width: 100%;
+}
+.sidebar .navigation .nav-tab {
+  color: #eeefd8;
+}
+.sidebar .navigation .nav-tab .tab-title {
+  text-align: center;
+  margin: 0px;
+}
+.sidebar .navigation .nav-tab .greenhouses {
+  padding: 15px;
+}
+.sidebar .navigation .nav-tab .greenhouses .greenhouse {
+  padding: 12px;
+  border: #eeefd8 1px solid;
+  background-color: #eeefd8;
+  color: #80c761;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+.sidebar .navigation .nav-tab .greenhouses .greenhouse .icon {
+  content: url(../img/greenhouse-icon.svg);
+  height: 25px;
+  width: 25px;
+  display: block;
+  float: left;
+  padding-right: 20px;
+}
+.sidebar .navigation .nav-tab .greenhouses .greenhouse:hover {
+  background-color: white;
+  transition: all 0.2s ease;
 }
 
 .dataTable {

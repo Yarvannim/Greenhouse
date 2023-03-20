@@ -23,6 +23,8 @@ class Greenhouse(Base):
     __tablename__ = 'greenhouses'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
+    greenhouse_name = Column(String(45), nullable=False)
+    greenhouse_number = Column(Integer, nullable=False)
 
 class GreenhouseData(Base):
     __tablename__ = 'greenhouse_data'
@@ -116,5 +118,20 @@ def getHighestData(_id):
         'highest_humidity': str(queryData[1]),
         'highest_temperature': str(queryData[2]),
     })
+    jsonified_results = json.dumps({'results': results})
+    return jsonified_results
+
+def getGreenhouses():
+    session = Session()
+    queryData = session.query(Greenhouse).all()
+    print(queryData)
+    results = []
+    for record in queryData:
+        results.append({
+            'greenhouse_id': str(record.id),
+            'greenhouse_name': str(record.greenhouse_name),
+            'greenhouse_number': str(record.greenhouse_number)
+        })
+    session.close()
     jsonified_results = json.dumps({'results': results})
     return jsonified_results

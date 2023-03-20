@@ -12,9 +12,11 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    {% include 'sidebar.html' %}
     <section>
         {% block content %}{% endblock %}
     </section>
 </body>
+    <script type="text/javascript" src="../static/js/BaseFunctions.js"></script>
     {% block endscripts %}{% endblock %}
 </html>

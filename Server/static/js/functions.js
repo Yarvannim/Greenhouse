@@ -28,9 +28,11 @@ $(document).ready(function(){
 });
 
 function getData(){
-  let greenhouse = $("#input_greenhouse").val()
-  let amount = $("#input_amount").val()
-  $.getJSON(`http://127.0.0.1:5000/data?greenhouse=${greenhouse}&amount=${amount}`, function(data){
+  const parameters = GetParameters()
+  const greenhouse = parameters.get('greenhouse')
+  // let greenhouse = $("#input_greenhouse").val()
+  // let amount = $("#input_amount").val()
+  $.getJSON(`http://127.0.0.1:5000/data?greenhouse=${greenhouse}&amount=10`, function(data){
     const results = data.results
     let newresults = results.map(result => `<tr><td>${result.Greenhouse_number}</td><td>${result.Sensor_ID}</td><td>${result.time}</td><td>${result.light_level}</td><td>${result.humidity}</td><td>${result.temperature}</td></tr>`)
     $(".dataDisplay").empty()
@@ -38,8 +40,9 @@ function getData(){
   });
 }
 
-function getAverages(){
-  let greenhouse = $("#input_greenhouse").val()
+function getAverages(parameter){
+  const greenhouse = parameter.get('greenhouse')
+  // let greenhouse = $("#input_greenhouse").val()
   $.getJSON(`http://127.0.0.1:5000/data/averages?greenhouse=${greenhouse}`, function(data){
     const results = data.results
     let newresults = results.map(result => `<td>${result.average_light_Level}</td><td>${result.average_humidity}</td><td>${result.average_humidity}</td>`)
@@ -48,8 +51,9 @@ function getAverages(){
   });
 }
 
-function getLowest(){
-  let greenhouse = $("#input_greenhouse").val()
+function getLowest(parameter){
+  const greenhouse = parameter.get('greenhouse')
+  // let greenhouse = $("#input_greenhouse").val()
   $.getJSON(`http://127.0.0.1:5000/data/minimum?greenhouse=${greenhouse}`, function(data){
     const results = data.results
     let newresults = results.map(result => `<td>${result.lowest_light_Level}</td><td>${result.lowest_humidity}</td><td>${result.lowest_humidity}</td>`)
@@ -58,8 +62,9 @@ function getLowest(){
   });
 }
 
-function getHighest(){
-  let greenhouse = $("#input_greenhouse").val()
+function getHighest(parameter){
+  const greenhouse = parameter.get('greenhouse')
+  // let greenhouse = $("#input_greenhouse").val()
   $.getJSON(`http://127.0.0.1:5000/data/highest?greenhouse=${greenhouse}`, function(data){
     const results = data.results
     let newresults = results.map(result => `<td>${result.highest_light_Level}</td><td>${result.highest_humidity}</td><td>${result.highest_humidity}</td>`)
@@ -69,8 +74,15 @@ function getHighest(){
 }
 
 function getAllData(){
+  const parameters = GetParameters()
   getData()
-  getAverages()
-  getLowest()
-  getHighest()
+  getAverages(parameters)
+  getLowest(parameters)
+  getHighest(parameters)
+}
+
+function GetParameters(){
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams
 }
