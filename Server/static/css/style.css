@@ -35,6 +35,9 @@ section {
 .sidebar .navigation .nav-tab .greenhouses {
   padding: 15px;
 }
+.sidebar .navigation .nav-tab .greenhouses a {
+  text-decoration: none;
+}
 .sidebar .navigation .nav-tab .greenhouses .greenhouse {
   padding: 12px;
   border: #eeefd8 1px solid;
@@ -62,7 +65,7 @@ section {
   border-spacing: 0;
 }
 .dataTable thead tr {
-  background: #36304a;
+  background: #80c761;
 }
 .dataTable thead tr th {
   padding: 20px;

@@ -30,6 +30,7 @@ $(document).ready(function(){
 function getData(){
   const parameters = GetParameters()
   const greenhouse = parameters.get('greenhouse')
+  document.title = `Everlast | Greenhouse ${greenhouse}`
   // let greenhouse = $("#input_greenhouse").val()
   // let amount = $("#input_amount").val()
   $.getJSON(`http://127.0.0.1:5000/data?greenhouse=${greenhouse}&amount=10`, function(data){

@@ -31,6 +31,9 @@ section{
             }
             .greenhouses{
                 padding: 15px;
+                a{
+                    text-decoration: none;
+                }
                 .greenhouse{
                     padding: 12px;
                     border: #eeefd8 1px solid;
@@ -62,7 +65,7 @@ section{
     border-spacing: 0;
     thead{
         tr{
-            background: #36304a;
+            background: #80c761;
             th{
                 padding: 20px;
                 font-size: 18px;
